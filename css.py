@@ -11,15 +11,30 @@ class Selector(object):
     pass
 
 class SimpleSelector(Selector):
-    def __init__(self, tag_name, id, s_class):
+    def __init__(self, tag_name, id, clazz):
         self.tag_name = tag_name
         self.id = id
-        self.s_class = s_class
+        self.clazz = clazz
+
+    def specificity(self):
+        a = 0 if (self.id == None) else 1
+        b = len(self.clazz)
+        c = 0 if (self.tag_name == None) else 1
+        return (a, b, c)
+
+
 
 class Declaration(object):
     def __init__(self, name, value):
         self.name = name
         self.value = value
+
+class color(object):
+    def __init__(self, r, g, b, a):
+        self.r = r
+        self.g = g
+        self.b = b
+        self.a = a
 
 class Parser:
     def __init__(self, pos, input):
@@ -62,9 +77,9 @@ class Parser:
             if '#' == self.next_char():
                 self.consume_char()
                 selector.id = self.parse_identifier()
-            elif '.' == self.next_char() or ' ' == self.next_char():
+            elif '.' == self.next_char():
                 self.consume_char()
-                selector.s_class.append(self.parse_identifier())
+                selector.clazz.append(self.parse_identifier())
             elif '*' == self.next_char():
                 self.consume_char()
             elif self.next_char().isalnum():
@@ -75,11 +90,78 @@ class Parser:
         return selector
 
     def parse_identifier(self):
+        def test(c):
+            return c.isalnum()
+        return self.consume_while(test)
+
+    def parse_rule(self):
+        selectors = self.parse_selectors()
+        declarations = self.parse_declarations()
+        return Rule(selectors, declarations)
+
+    def parse_selectors(self):
+        selectors = []
+        while True:
+            selectors.append(self.parse_simple_selector())
+            self.consume_whilespace()
+            if self.next_char() == ',':
+                self.consume_char()
+                self.consume_whilespace()
+            elif self.next_char() == '{':
+                break
+            else:
+                print("unexpect % in selector list" % self.next_char())
+        sorted(selectors, reverse=True)
+        return selectors
+
+    def parse_declarations(self):
+        assert self.consume_char() == '{'
+        declarations = []
+        while True:
+            self.consume_whilespace()
+            if self.next_char() == '}':
+                self.consume_char()
+                break
+            else:
+                declarations.append(self.parse_declaration())
+
+
+
+    def parse_declaration(self):
+        name = self.parse_identifier()
+        self.consume_whilespace()
+        assert self.consume_char() == ':'
+        self.consume_whilespace()
+        value = self.parse_value()
+        self.consume_whilespace()
+        assert self.consume_char() == ';'
+
+
+    def parse_value(self):
+        if self.next_char() == '#':
+            return self.parse_color()
+        elif self.next_char().isdigit():
+            return self.parse_length()
+        else:
+            return self.parse_identifier()
+
+
+
+    def parse_color(self):
+        assert self.consume_char() == '#'
+        r = self.parse_hex_pair()
+        g = self.parse_hex_pair()
+        b = self.parse_hex_pair()
+        a = 255
+        return (r, g, b, a)
+
+    def parse_hex_pair(self):
+        s = self.input[self.pos : self.pos + 2]
+        self.pos += 2
+        return int(s, 16)
+
+    def parse_length(self):
         pass
-
-
-
-
 
 
 
