@@ -5,21 +5,13 @@ class Parser:
         self.pos = pos
         self.input = input
 
-    @staticmethod
-    def isspace(c):
-        return c.isspace()
-
-    @staticmethod
-    def istag_name(c):
-        return c.isalnum()
-
     #Read the current char without consuming it
     def next_char(self):
         return self.input[self.pos]
 
     #Do the next char start with the given string?
     def starts_with(self, s):
-        return s.startswith(self.next_char())
+        return self.input[self.pos:].startswith(s)
 
     #Return true if all input is consumed
     def eof(self):
@@ -39,10 +31,14 @@ class Parser:
         return result
 
     def consume_whilespace(self):
-        self.consume_while(Parser.isspace)
+        def test(c):
+            return c.isspace()
+        self.consume_while(test)
 
     def parse_tag_name(self):
-        self.consume_while(Parser.istag_name)
+        def test(c):
+            return c.isalnum()
+        return self.consume_while(test)
 
     def parse_node(self):
         if self.next_char() == '<':
@@ -134,7 +130,10 @@ if __name__ == '__main__':
     </html>
     '''
     parse = Parser(0, str)
-    print(parse.parse())
+    node = parse.parse()
+    node.print_test()
+
+
 
 
 
