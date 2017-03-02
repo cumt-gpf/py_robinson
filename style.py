@@ -20,15 +20,16 @@ def matches_simple_selector(elementdata, selector):
         return False
 
     elem_clazzes = elementdata.clazzes()
-    if len(set(elem_clazzes) & set(selector.clazz)) == 0:
-        return False
+    for clazz in selector.clazz:
+        if not elem_clazzes.__contains__(clazz):
+            return False
 
     return True
 
 def match_rule(elementdata, rule):
     for selector in rule.selectors:
         if(matches(elementdata, selector)):
-            return (selector.specifity(), rule)
+            return (selector.specificity(), rule)
     return None
 
 def matching_rules(elementdata, stylesheet):

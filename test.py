@@ -1,6 +1,2 @@
-test = {}
-if test.has_key('3'):
-    print(test['3'])
-else:
-    print None
-
+list = [1,2,3,4]
+print list.__contains__(5)
