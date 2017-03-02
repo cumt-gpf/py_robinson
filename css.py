@@ -7,6 +7,7 @@ class Rule(object):
         self.selectors = selectors
         self.declarations = declarations
 
+
 class Selector(object):
     pass
 
@@ -91,13 +92,24 @@ class Parser:
 
     def parse_identifier(self):
         def test(c):
-            return c.isalnum()
+            return c.isalnum() or c == '_' or c == '-'
         return self.consume_while(test)
 
     def parse_rule(self):
         selectors = self.parse_selectors()
         declarations = self.parse_declarations()
         return Rule(selectors, declarations)
+
+    def parse_rules(self):
+        rules = []
+        while True:
+            self.consume_whilespace()
+            if self.eof():
+                break
+            else:
+                rules.append(self.parse_rule())
+
+        return rules
 
     def parse_selectors(self):
         selectors = []
@@ -124,6 +136,7 @@ class Parser:
                 break
             else:
                 declarations.append(self.parse_declaration())
+        return declarations
 
 
 
@@ -135,6 +148,8 @@ class Parser:
         value = self.parse_value()
         self.consume_whilespace()
         assert self.consume_char() == ';'
+
+        return (name, value)
 
 
     def parse_value(self):
@@ -160,11 +175,33 @@ class Parser:
         self.pos += 2
         return int(s, 16)
 
+    def parse_float(self):
+        def test(c):
+            return c.isdigit()
+        s = self.consume_while(test)
+        return s
+
+    def parse_unit(self):
+        s = self.parse_identifier()
+        if s == 'px':
+            return s
+        else:
+            print ('unrecognized unit')
+
+
     def parse_length(self):
-        pass
+        return (self.parse_float(), self.parse_unit())
 
 
-
+if __name__ == '__main__':
+    test = '''
+         h1, h2, h3 { margin: auto; color: #cc0000; }
+         div.test { margin-bottom: 20px; padding: 10px; }
+         #answer { display: none; }
+    '''
+    paser = Parser(0, test)
+    haha = paser.parse_rules()
+    print('hello')
 
 
 
