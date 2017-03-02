@@ -192,6 +192,9 @@ class Parser:
     def parse_length(self):
         return (self.parse_float(), self.parse_unit())
 
+    def parse(self):
+        return Stylesheet(self.parse_rules())
+
 
 if __name__ == '__main__':
     test = '''

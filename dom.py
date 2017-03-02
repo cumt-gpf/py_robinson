@@ -37,5 +37,17 @@ class ElementData(object):
     def __str__(self):
         return self.tag_name
 
+    def id(self):
+        if self.attributes.has_key('id'):
+            return self.attributes['id']
+        else:
+            return None
+
+    def clazzes(self):
+        if self.attributes.has_key('class'):
+            return self.attributes['class'].split(' ')
+        else:
+            return []
+
 
 
