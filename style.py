@@ -50,7 +50,7 @@ def specified_values(elementdata, stylesheet):
     sorted(rules, key=MyFn)
     for (specifity, rule) in rules:
         for declaration in rule.declarations:
-            values[declaration.name] = declaration.value
+            values[declaration[0]] = declaration[1]
 
     return values
 
