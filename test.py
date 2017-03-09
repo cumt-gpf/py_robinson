@@ -1,2 +1,7 @@
-list = [1,2,3,4]
-print list.__contains__(5)
+a = input('test:')
+if a == 5:
+    root = 5
+if a == 6:
+    root = 6
+
+print root

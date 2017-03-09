@@ -8,6 +8,22 @@ class StyleNode(object):
         self.specified_values = specified_values
         self.children = children
 
+    def value(self, name):
+        if self.specified_values.has_key(name):
+            return self.specified_values[name]
+        else:
+            return None
+
+    def display(self):
+        if self.specified_values.has_key('display'):
+            value = self.specified_values('display')
+            if value == 'block' or value == 'none':
+                return value
+            else:
+                return 'inline'
+        else:
+            return 'inline'
+
 def matches(elementdata, selector):
     if isinstance(selector, css.SimpleSelector):
         return matches_simple_selector(elementdata, selector)
