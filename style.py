@@ -24,6 +24,14 @@ class StyleNode(object):
         else:
             return 'inline'
 
+    def lookup(self, name, fallback_name, default):
+        if self.value(name) != None:
+            return self.value(name)
+        elif self.value(fallback_name) != None:
+            return self.value(fallback_name)
+        else:
+            return default
+
 def matches(elementdata, selector):
     if isinstance(selector, css.SimpleSelector):
         return matches_simple_selector(elementdata, selector)

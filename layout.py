@@ -1,3 +1,5 @@
+import html
+import css
 import style
 class Dimensions(object):
     def __init__(self):
@@ -26,6 +28,12 @@ class LayoutBox(object):
         self.box_type = box_type
         self.children = []
 
+    def get_style_node(self):
+        if isinstance(self.box_type, AnonymousBlock):
+            assert 1 > 2
+        else:
+            return self.box_type.style_node
+
     def get_inline_container(self):
         if isinstance(self.box_type, InlineNode) or isinstance(self.box_type, AnonymousBlock):
             return self
@@ -35,6 +43,42 @@ class LayoutBox(object):
             else:
                 self.children.append(LayoutBox(AnonymousBlock))
                 return self.children[-1]
+    def layout(self, containing_block):
+        if isinstance(self.box_type, BlockNode):
+            self.layout_block(containing_block)
+
+    def layout_block(self, containing_block):
+        pass
+
+    def calculate_block_width(self, containing_block):
+        style = self.get_style_node();
+        width = style.value('width')
+        auto = css.Keyword('auto')
+        if width == None:
+            width = auto
+        zero = css.Length(0.0, 'Px')
+        margin_left = style.lookup('margin-left', 'margin', zero)
+        margin_right = style.lookup('margin-right', 'margin', zero)
+
+        border_left = style.lookup('border-left-width', 'border-width', zero)
+        border_right = style.lookup('border-right-width', 'border-width', zero)
+
+        padding_left = style.lookup('padding-left', 'padding', zero)
+        padding_right = style.lookup('padding-right', 'padding', zero)
+
+        total = 0.0
+        for a in [width, margin_left, margin_right, border_left, border_right, padding_left, padding_right]:
+            total += a.to_px()
+
+        if width != auto and total > containing_block.width:
+            if margin_left == auto:
+                margin_left = css.Length(0.0, 'Px')
+            if margin_right == auto:
+                margin_right = css.Length(0.0, 'Px')
+
+
+
+
 
 
 class BoxType:
@@ -43,11 +87,11 @@ class BoxType:
 
 class BlockNode(BoxType):
     def __init__(self, style_node):
-        super(BlockNode, self).__init__(style_node)
+        BoxType.__init__(self, style_node)
 
 class InlineNode(BoxType):
     def __init__(self, style_node):
-        super(InlineNode, self).__init__(style_node)
+        BoxType.__init__(self, style_node)
 
 class AnonymousBlock(BoxType):
     pass
@@ -70,5 +114,27 @@ def build_layout_tree(style_node):
             pass
 
     return root
+
+if __name__ == '__main__':
+    html_test = '''
+        <html>
+            <body>
+                <h1>Title</h1>
+                <div id="main" class="test">
+                    <p>Hello <em>world</em>!</p>
+                </div>
+            </body>
+        </html>
+    '''
+    css_test = '''
+         h1, h2, h3 { margin: auto; color: #cc0000; }
+         div.test { margin-bottom: 20px; padding: 10px; }
+         #answer { display: none; }
+    '''
+    root = html.Parser(0, html_test).parse()
+    stylesheet = css.Parser(0, css_test).parse()
+    stylednode = style.style_tree(root, stylesheet)
+    layoutroot = build_layout_tree(stylednode)
+    print('hello')
 
 

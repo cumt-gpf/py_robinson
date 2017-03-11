@@ -30,6 +30,24 @@ class Declaration(object):
         self.name = name
         self.value = value
 
+class Value:
+    def to_px(self):
+        if isinstance(self, Length):
+            return self.length
+        else:
+            return 0.0
+class Keyword(Value):
+    def __init__(self, keyword):
+        self.keyword = keyword
+
+class Length(Value):
+    def __init__(self, length, unit):
+        self.length = length
+        self.unit = unit
+class ColorValue(Value):
+    def __init__(self, color):
+        self.color = color
+
 class color(object):
     def __init__(self, r, g, b, a):
         self.r = r
