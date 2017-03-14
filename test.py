@@ -1,7 +1,3 @@
-a = input('test:')
-if a == 5:
-    root = 5
-if a == 6:
-    root = 6
-
-print root
+import png
+png.from_array([[255, 0, 0, 255],
+                    [0, 255, 255, 0]], 'L').save("small_smiley.png")

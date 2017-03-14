@@ -164,6 +164,14 @@ class InlineNode(BoxType):
 class AnonymousBlock(BoxType):
     pass
 
+def layout_tree(node, containing_block):
+    containing_block.content.height = 0.0
+
+    root_box = build_layout_tree(node)
+    root_box.layout(containing_block)
+
+    return root_box
+
 def build_layout_tree(style_node):
     # create root box
     assert style_node.display() != 'none'
