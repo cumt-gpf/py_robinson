@@ -112,13 +112,13 @@ if __name__ == '__main__':
                         <div class="e">
                             <div class="f">
                                 <div class="g">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
     '''
     css_test = '''
          * { display: block; padding: 12px; }
