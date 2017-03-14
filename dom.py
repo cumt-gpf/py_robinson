@@ -13,29 +13,18 @@ class Node(object):
 
 class Text(Node):
     def __init__(self, children, data):
-        super(Text, self).__init__(children)
+        Node.__init__(self, children)
         self.data = data
-
-    def __str__(self):
-        return self.data
-
 
 class Element(Node):
     def __init__(self, name, attrs, children):
-        super(Element, self).__init__(children)
-        elementdata = ElementData(name, attrs)
-        self.elementdata = elementdata
-
-    def __str__(self):
-        return self.elementdata.tag_name
+        Node.__init__(self, children)
+        self.elementdata = ElementData(name, attrs)
 
 class ElementData(object):
     def __init__(self, tag_name, attributes):
         self.tag_name = tag_name
         self.attributes = attributes
-
-    def __str__(self):
-        return self.tag_name
 
     def id(self):
         if self.attributes.has_key('id'):
@@ -48,6 +37,5 @@ class ElementData(object):
             return self.attributes['class'].split(' ')
         else:
             return []
-
 
 
