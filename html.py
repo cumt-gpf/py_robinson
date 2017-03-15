@@ -31,13 +31,11 @@ class Parser:
         return result
 
     def consume_whilespace(self):
-        def test(c):
-            return c.isspace()
+        test = lambda c: c.isspace()
         self.consume_while(test)
 
     def parse_tag_name(self):
-        def test(c):
-            return c.isalnum()
+        test = lambda c: c.isalnum()
         return self.consume_while(test)
 
     def parse_node(self):
@@ -47,12 +45,9 @@ class Parser:
             return self.parse_text()
 
     def parse_text(self):
-        def test(c):
-            return c != '<'
+        test = lambda c: c != '<'
         data = self.consume_while(test)
-
         return dom.Text([], data)
-
 
     def parse_element(self):
         # Open tag
@@ -81,8 +76,7 @@ class Parser:
     def parse_attr_value(self):
         open_quote = self.consume_char()
         assert open_quote == '"' or open_quote == '&#39;'
-        def test(c):
-            return c != open_quote
+        test = lambda c: c != open_quote
         value = self.consume_while(test)
         assert self.consume_char() == open_quote
         return value
@@ -120,13 +114,13 @@ class Parser:
 
 if __name__ == '__main__':
     str = '''
-        <html>
-    <body>
-        <h1>Title</h1>
-        <div id="main" class="test">
-            <p>Hello <em>world</em>!</p>
-        </div>
-    </body>
+    <html>
+        <body>
+            <h1>Title</h1>
+            <div id="main" class="test">
+                <p>Hello <em>world</em>!</p>
+            </div>
+        </body>
     </html>
     '''
     parse = Parser(0, str)
