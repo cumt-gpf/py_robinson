@@ -74,22 +74,22 @@ CSS有一个非常规律的语法，所以相比HTML比较好匹配。当遇到�
 ```python
 #匹配一个SimpleSelector，如#id.class1.class2.class3
 def parse_simple_selector(self):
-        selector = SimpleSelector(None, None, [])
-        while not self.eof():
-            if '#' == self.next_char():
-                self.consume_char()
-                selector.id = self.parse_identifier()
-            elif '.' == self.next_char():
-                self.consume_char()
-                selector.clazz.append(self.parse_identifier())
-            elif '*' == self.next_char():
-                self.consume_char()
-            elif self.next_char().isalnum():
-                selector.tag_name = self.parse_identifier()
-            else:
-                break
+    selector = SimpleSelector(None, None, [])
+    while not self.eof():
+        if '#' == self.next_char():
+            self.consume_char()
+            selector.id = self.parse_identifier()
+        elif '.' == self.next_char():
+            self.consume_char()
+            selector.clazz.append(self.parse_identifier())
+        elif '*' == self.next_char():
+            self.consume_char()
+        elif self.next_char().isalnum():
+            selector.tag_name = self.parse_identifier()
+        else:
+            break
 
-        return selector
+    return selector
 ```
 上面代码缺少错误检测，一个实用的parser将会跳过不合法的selector。
 
@@ -101,32 +101,32 @@ def parse_simple_selector(self):
 
 ```python
 def specificity(self):
-        a = 0 if (self.id == None) else 1
-        b = len(self.clazz)
-        c = 0 if (self.tag_name == None) else 1
-        return (a, b, c)
+    a = 0 if (self.id == None) else 1
+    b = len(self.clazz)
+    c = 0 if (self.tag_name == None) else 1
+    return (a, b, c)
 ```
 每一条规则的selectors被放在了一个list中，并且特征值最大的放在前面，这在以后的matching中非常重要，下一节会讲。
 ```python
 def parse_rule(self):
-        selectors = self.parse_selectors()
-        declarations = self.parse_declarations()
-        return Rule(selectors, declarations)
+    selectors = self.parse_selectors()
+    declarations = self.parse_declarations()
+    return Rule(selectors, declarations)
 
 def parse_selectors(self):
-        selectors = []
-        while True:
-            selectors.append(self.parse_simple_selector())
+    selectors = []
+    while True:
+        selectors.append(self.parse_simple_selector())
+        self.consume_whilespace()
+        if self.next_char() == ',':
+            self.consume_char()
             self.consume_whilespace()
-            if self.next_char() == ',':
-                self.consume_char()
-                self.consume_whilespace()
-            elif self.next_char() == '{':
-                break
-            else:
-                raise SyntaxError("unexpect % in selector list" % self.next_char())
-        sorted(selectors, reverse=True)
-        return selectors
+        elif self.next_char() == '{':
+            break
+        else:
+            raise SyntaxError("unexpect % in selector list" % self.next_char())
+    sorted(selectors, reverse=True)
+    return selectors
 ```
 剩下的内容就非常简单了，可以之间在我的[代码库](https://github.com/cumt-gpf/py_robinson/tree/2b8352e616166acb5b2684b5de89d3566f354ed0)中看。
 
