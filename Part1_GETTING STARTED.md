@@ -1,5 +1,7 @@
 PART1: GETTING STARTED 
 =====
+声明：文章参考自[Matt Brubeck](https://limpet.net/mbrubeck/2014/08/08/toy-layout-engine-1.html)
+
 我们在做些什么？
 -----
 浏览器引擎是web浏览器的一部分，它从Internet中抓取页面并且翻译为我们可读，可听，可看的形式。像Blink，Webkit，Trident都是
