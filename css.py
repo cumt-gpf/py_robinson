@@ -140,7 +140,7 @@ class Parser:
             elif self.next_char() == '{':
                 break
             else:
-                print("unexpect % in selector list" % self.next_char())
+                raise SyntaxError("unexpect % in selector list" % self.next_char())
         sorted(selectors, reverse=True)
         return selectors
 

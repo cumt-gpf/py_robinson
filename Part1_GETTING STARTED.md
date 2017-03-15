@@ -7,7 +7,7 @@ PART1: GETTING STARTED
 浏览器引擎是web浏览器的一部分，它从Internet中抓取页面并且翻译为我们可读，可听，可看的形式。像Blink，Webkit，Trident都是
 浏览器引擎。相反，浏览器自己的UI被称为chrome，有些浏览器UI不一样，但是有一样的浏览器引擎。
 
-一个浏览器引擎包含很多模块，有HTTP客户端，HTML paser，CSS paser，JavaScript引擎等。
+一个浏览器引擎包含很多模块，有HTTP客户端，HTML parser，CSS parser，JavaScript引擎等。
 
 为什么要写一个玩具浏览器引擎？
 -----
@@ -45,6 +45,6 @@ class ElementData(object):
         self.tag_name = tag_name
         self.attributes = attributes
 ```
-一个完整的DOM实现包含了很多数据和方法，但是对于我们的玩具，这些已经够了。下一节会写一个HTML paser来把HTML代码
+一个完整的DOM实现包含了很多数据和方法，但是对于我们的玩具，这些已经够了。下一节会写一个HTML parser来把HTML代码
 转化为以树组织的DOM结点。
 
