@@ -67,7 +67,7 @@ def render_borders(dispaylist, layout_box):
 class Canvas:
     def __init__(self, width, height):
         white = css.color(255, 255, 255, 255)
-        self.pixels = [white] * (width * height)
+        self.pixels = [white] * (int(width) * int(height))
         self.width = width
         self.height = height
     def paint_item(self, item):
@@ -79,7 +79,7 @@ class Canvas:
 
             for y in (y0, y1):
                 for x in (x0, x1):
-                    self.pixels[y * self.width + x] = item.color
+                    self.pixels[int(y * self.width + x)] = item.color
 
 
 def clamp(a, lower, upper):

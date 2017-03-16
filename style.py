@@ -37,18 +37,19 @@ def matches(elementdata, selector):
         return matches_simple_selector(elementdata, selector)
 
 def matches_simple_selector(elementdata, selector):
-    if selector.tag_name != elementdata.tag_name:
-        return False
+    result = False
+    if selector.tag_name != None and selector.tag_name == elementdata.tag_name:
+        result = True
 
-    if selector.id != elementdata.id():
-        return False
+    if selector.id != None and selector.id == elementdata.id():
+        result = True
 
     elem_clazzes = elementdata.clazzes()
-    for clazz in selector.clazz:
-        if not elem_clazzes.__contains__(clazz):
-            return False
+    for clazz in elem_clazzes:
+        if selector.clazz.__contains__(clazz):
+            result = True
 
-    return True
+    return result
 
 def match_rule(elementdata, rule):
     for selector in rule.selectors:
@@ -93,19 +94,32 @@ def style_tree(root, stylesheet):
 
 if __name__ == '__main__':
     html_test = '''
-        <html>
-            <body>
-                <h1>Title</h1>
-                <div id="main" class="test">
-                    <p>Hello <em>world</em>!</p>
+        <div class="a">
+            <div class="b">
+                <div class="c">
+                    <div class="d">
+                        <div class="e">
+                            <div class="f">
+                                <div class="g">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </body>
-        </html>
+            </div>
+        </div>
+    </div>
+
+
     '''
     css_test = '''
-         h1, h2, h3 { margin: auto; color: #cc0000; }
-         div.test { margin-bottom: 20px; padding: 10px; }
-         #answer { display: none; }
+         * { display: block; padding: 12px; }
+        .a { background: #ff0000; }
+        .b { background: #ffa500; }
+        .c { background: #ffff00; }
+        .d { background: #008000; }
+        .e { background: #0000ff; }
+        .f { background: #4b0082; }
+        .g { background: #800080; }
     '''
     root = html.Parser(0, html_test).parse()
     stylesheet = css.Parser(0, css_test).parse()
