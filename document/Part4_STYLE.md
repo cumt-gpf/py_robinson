@@ -13,7 +13,7 @@ class StyleNode(object):
         self.children = children
 ```
 浏览器经常以一棵树作为输入，输出另一棵相关的树。例如，Gecko的layout代码以DOM tree作为输入，产生一个frame tree，可以用来构建view tree。
-我们的流程大概如下图![](./pipeline.png)
+我们的流程大概如下图![](pipeline.png)
 
 选择器匹配
 -----

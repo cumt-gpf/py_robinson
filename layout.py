@@ -174,11 +174,12 @@ def layout_tree(node, containing_block):
 
 def build_layout_tree(style_node):
     # create root box
-    assert style_node.display() != 'none'
     if style_node.display() == 'block':
         box_type = BlockNode(style_node)
     elif style_node.display() == 'inline':
         box_type = InlineNode(style_node)
+    else:
+        raise SyntaxError('Root node has display: none')
     root = LayoutBox(box_type)
 
     for child in style_node.children:
