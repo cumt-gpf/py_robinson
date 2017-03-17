@@ -57,7 +57,10 @@ class LayoutBox(object):
             self.layout_block(containing_block)
 
     def layout_block(self, containing_block):
-        pass
+        self.calculate_block_width(containing_block)
+        self.calculate_block_position(containing_block)
+        self.layout_block_chilren()
+        self.calculate_block_height()
 
     def calculate_block_width(self, containing_block):
         style = self.get_style_node();
